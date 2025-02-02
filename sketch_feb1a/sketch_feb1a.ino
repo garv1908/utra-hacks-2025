@@ -17,10 +17,10 @@ int greenPW = 0;
 int bluePW = 0;
 
 void colourSetup() {
-  // colour stuff
-  // Set S0 - S3 as outputs
-  pinMode(OE_PIN, OUTPUT);
-  digitalWrite(OE_PIN, LOW);
+	// colour stuff
+	// Set S0 - S3 as outputs
+	pinMode(OE_PIN, OUTPUT);
+	digitalWrite(OE_PIN, LOW);
 	pinMode(S0, OUTPUT);
 	pinMode(S1, OUTPUT);
 	pinMode(S2, OUTPUT);
@@ -32,23 +32,22 @@ void colourSetup() {
 
 	// Set Sensor output as input
 	pinMode(sensorOut, INPUT);
-
 }
 
 void setup() {
-  // Setup Serial Monitor
+	// Setup Serial Monitor
 	Serial.begin(9600);
-	
-  colourSetup();
 
-  // servo writup
-  servo.attach(servoPin);
-  servo.write(10);
-  delay(1000);
+	colourSetup();
+
+	// servo writup
+	servo.attach(servoPin);
+	servo.write(10);
+	delay(1000);
 }
 
 void loop() {
-  // GET PULSE WIDTH
+	// GET PULSE WIDTH
 	redPW = getRedPW();
 	// Delay to stabilize sensor
 	delay(200);
@@ -59,8 +58,8 @@ void loop() {
 	bluePW = getBluePW();
 	delay(200);
 
-  colourTest();
-	
+	colourTest();
+
 }
 
 void goStraight() {
@@ -70,7 +69,7 @@ void goStraight() {
 
 
 void colourTest() {
-  // Print output to Serial Monitor
+	// Print output to Serial Monitor
 	Serial.print("Red PW = ");
 	Serial.print(redPW);
 	Serial.print(" - Green PW = ");
