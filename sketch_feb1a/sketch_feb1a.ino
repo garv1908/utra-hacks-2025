@@ -1,16 +1,16 @@
 #include <Servo.h>
 
-#define speed 250
-#define distanceThreshold 500
+#define speed 170
+#define distanceThreshold 3
 // Variables for Color Pulse Width Measurements
 
 extern int rgb[3];  // Declare in another file
+extern int distanceFromWall;
 
 // Servo servo;
 
 // const int servoPin = ;
 // int pos = 0;
-
 
 void setup() {
 	// Setup Serial Monitor
@@ -26,23 +26,27 @@ void setup() {
 
 void loop() {
 	pickUpRGB();
-	delay(200);
   colourTest();
-  // ultrasoundTest();
+  ultrasoundTest();
   setMotorSpeed(speed);
   goForward();
-  delay(200);
   while (!isBlack(rgb)) {
+    distanceFromWall = getDistanceFromWall();
+    while (distanceFromWall > distanceThreshold && distanceFromWall != 0) {
+      goForward();
+      Serial.println(distanceFromWall > distanceThreshold);
+      Serial.println(distanceFromWall);
+      distanceFromWall = getDistanceFromWall();
+    }
+    brake();
+    delay(2000);
+    goBack();
+    delay(500);
+    brake();
     pickUpRGB();
     colourTest();
-    // distanceFromWall = getDistanceFromWall();
-    // while (distanceFromWall > distanceThreshold) {
-    //   distanceFromWall = getDistanceFromWall();
-    //   goForward();
-    // }
     if (isBlack(rgb)) {
       Serial.println("FINISHED!");
-      // stop();
       delay(10000);
       // exit(0);
     }
@@ -58,10 +62,9 @@ void loop() {
       Serial.println("saw blue, taking a left turn");
       turnLeft();
     }
-
     Serial.println("in while loop");
     goForward();
     colourTest();
   }
-  delay(500);
+  // delay(500);
 }

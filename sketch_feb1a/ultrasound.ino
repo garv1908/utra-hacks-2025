@@ -1,19 +1,22 @@
-// #include "NewPing.h"
+#include "NewPing.h"
 
-// #define TRIG_PIN 11
-// #define ECHO_PIN 10
+#define TRIG_PIN 0
+#define ECHO_PIN 1
 
-// #define MAX_DISTANCE 30
+#define MAX_DISTANCE 250
 
-// NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+int distanceFromWall = 900000001;
 
-// int getDistanceFromWall() {
-//   return sonar.ping.cm();
-// }
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 
-// void ultrasoundTest() {
-//   Serial.print("Distance = ");
-//   Serial.print(sonar.ping.cm());
-//   Serial.println(" cm");
-//   delay(500);
-// }
+int getDistanceFromWall() {
+  ultrasoundTest();
+  return sonar.ping_cm();
+}
+
+void ultrasoundTest() {
+  Serial.print("Distance = ");
+  Serial.print(sonar.ping_cm());
+  Serial.println(" cm");
+  delay(100);
+}

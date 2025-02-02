@@ -9,6 +9,8 @@ int in4 = 8;
 
 int rt = 515;
 
+// extern int speed;
+
 void motorSetup() {
   // Set all the motor control pins to outputs
   pinMode(enA, OUTPUT);
@@ -28,7 +30,6 @@ void motorSetup() {
 void setMotorSpeed(int s) {
   // Set motors to maximum speed
 	// For PWM maximum possible values are 0 to 255
-  Serial.println("enter set motor speed");
 	analogWrite(enA, s);
 	analogWrite(enB, s);
   Serial.println("set motor speed");
@@ -36,30 +37,26 @@ void setMotorSpeed(int s) {
 
 void goForward() {
   // Turn on motor A & B
-  Serial.println("trying to go forward");
+  Serial.println("go forward");
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   digitalWrite(in3, LOW);
   digitalWrite(in4, HIGH);
 
-  Serial.println("wrote direction");
-  delay(2000);
 }
 
 void goBack() {
   // Turn on motor A & B
-  Serial.println("trying to go back");
+  Serial.println("go back");
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   digitalWrite(in3, HIGH);
   digitalWrite(in4, LOW);
 
-
-  Serial.println("wrote direction");
-  delay(2000);
 }
 
 void turnRight() {
+  setMotorSpeed(255);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   digitalWrite(in3, HIGH);
@@ -67,9 +64,12 @@ void turnRight() {
   delay(rt);
   analogWrite(enA, 0);
   analogWrite(enB, 0);
+  delay(500);
+  setMotorSpeed(speed);
 }
 
 void turnLeft() {
+  setMotorSpeed(255);
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   digitalWrite(in3, LOW);
@@ -77,18 +77,21 @@ void turnLeft() {
   delay(rt);
   analogWrite(enA, 0);
   analogWrite(enB, 0);
+  delay(500);
+  setMotorSpeed(speed);
 }
 
 void uTurn() {
+  setMotorSpeed(255);
   turnRight();
   turnRight();
+  setMotorSpeed(speed);
 }
 
-void break(){
+void brake() {
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
-  analogWrite(enA, 0);
-  analogWrite(enB, 0);
+  Serial.println("took a break");
 }

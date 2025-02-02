@@ -28,31 +28,39 @@ void colourSetup() {
 
 
 void pickUpRGB() {
-
   // GET PULSE WIDTH
 	rgb[0] = getRedPW();
 	// Delay to stabilize sensor
-	delay(200);
+	delay(100);
 
 	rgb[1] = getGreenPW();
-	delay(200);
+	delay(100);
 
 	rgb[2] = getBluePW();
-	delay(200);
+	delay(100);
 }
 
 bool isBlack(int rgb[]) {
   bool a = (rgb[0] > blackThreshold && rgb[1] > blackThreshold && rgb[2] > blackThreshold);
-  delay(500);
+  delay(100);
   pickUpRGB();
   bool b = (rgb[0] > blackThreshold && rgb[1] > blackThreshold && rgb[2] > blackThreshold);
-  delay(500);
+  delay(100);
   pickUpRGB();
   bool c = (rgb[0] > blackThreshold && rgb[1] > blackThreshold && rgb[2] > blackThreshold);
   return (a && b && c);
 }
 bool isRed(int rgb[]) {
-  return (rgb[0] < rgb[1] && rgb[0] < rgb[2]);
+  bool a = (rgb[0] < rgb[1] && rgb[0] < rgb[2]);
+  delay(100);
+  pickUpRGB();
+  bool b = (rgb[0] < rgb[1] && rgb[0] < rgb[2]);
+  delay(100);
+  pickUpRGB();
+  bool c = (rgb[0] < rgb[1] && rgb[0] < rgb[2]);
+  delay(100);
+  pickUpRGB();
+  return (a && b && c);
 }
 bool isGreen(int rgb[]) {
   return (rgb[1] < rgb[0] && rgb[1] < rgb[2]);
