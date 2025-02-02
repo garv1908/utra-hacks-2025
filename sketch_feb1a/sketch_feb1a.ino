@@ -1,26 +1,26 @@
 #include <Servo.h>
-#define OE_PIN 1  
-#define S0 2
-#define S1 3
-#define S2 4
-#define S3 5
-#define sensorOut 6
-
+#define OE_PIN 5
+#define S0 6
+#define S1 7
+#define S2 8
+#define S3 9
+#define sensorOut 10
+#define blackThreshold 250
 
 // Motor A connections
-int enA = 9;
-int in1 = 8;
-int in2 = 7;
+int enA = 10;
+int in1 = 12;
+int in2 = 2;
 // Motor B connections
-int enB = 3;
-int in3 = 5;
+int enB = 11;
+int in3 = 3;
 int in4 = 4;
 
-int speed = 255;
+int speed = 150;
 
-Servo servo;
+// Servo servo;
 
-const int servoPin = 7;
+// const int servoPin = ;
 int pos = 0;
 
 // Variables for Color Pulse Width Measurements
@@ -69,13 +69,28 @@ void setup() {
 	colourSetup();
 
 	// servo writup
-	servo.attach(servoPin);
-	servo.write(10);
+	// servo.attach(servoPin);
+	// servo.write(10);
 	delay(1000);
 }
 
 void loop() {
-	// GET PULSE WIDTH
+	pickUpRGB();
+	delay(200);
+  colourTest();
+  setMotorSpeed(speed);
+  goStraight();
+  delay(2000);
+  while (!isBlack(r, g, b)) {
+    Serial.println("in while loop");
+    goStraight();
+    colourTest();
+  }
+  delay(5000);
+}
+
+void pickUpRGB() {
+  // GET PULSE WIDTH
 	r = getRedPW();
 	// Delay to stabilize sensor
 	delay(200);
@@ -85,20 +100,10 @@ void loop() {
 
 	b = getBluePW();
 	delay(200);
-
-  setMotorSpeed();
-  goStraight();
-  delay(2000);
-  while (!isBlack(r, g, b)) {
-    goStraight();
-  }
-	colourTest();
-
-
 }
 
 bool isBlack(int r, int g, int b) {
-  return (r > 200 && g > 200 && b > 200);
+  return (r > blackThreshold && g > blackThreshold && b > blackThreshold);
 }
 bool isRed(int r, int g, int b) {
   return (r < g && r < b);
@@ -110,19 +115,24 @@ bool isBlue(int r, int g, int b) {
   return (b < g && b < r);
 }
 
-void setMotorSpeed(int speed) {
+void setMotorSpeed(int s) {
   // Set motors to maximum speed
 	// For PWM maximum possible values are 0 to 255
-	analogWrite(enA, speed);
-	analogWrite(enB, speed);
+  Serial.println("enter set motor speed");
+	analogWrite(enA, s);
+	analogWrite(enB, s);
+  Serial.println("set motor speed");
 }
 
 void goStraight() {
   // Turn on motor A & B
+  Serial.println("trying to go straight");
 	digitalWrite(in1, HIGH);
 	digitalWrite(in2, LOW);
 	digitalWrite(in3, HIGH);
 	digitalWrite(in4, LOW);
+
+  Serial.println("wrote direction");
 	delay(2000);
 }
 
@@ -155,22 +165,22 @@ void colourTest() {
 	Serial.println(b);
 }
 
-void clawTest() {
-  int degree = 95;
-  for (int i = 0; i <= degree; i += 5) {
-     servo.write(i);
-     // Serial.print(i);
-     delay(25);
-   }
-   delay(3000);  
+// void clawTest() {
+//   int degree = 95;
+//   for (int i = 0; i <= degree; i += 5) {
+//      servo.write(i);
+//      // Serial.print(i);
+//      delay(25);
+//    }
+//    delay(3000);  
 
 
-   for (int i = degree; i >= 0; i -= 5) {
-     servo.write(i);
-     // Serial.println(i);
-     delay(25);
-   }
-}
+//    for (int i = degree; i >= 0; i -= 5) {
+//      servo.write(i);
+//      // Serial.println(i);
+//      delay(25);
+//    }
+// }
 
 int getRedPW() {
 	// Set sensor to read Red only
