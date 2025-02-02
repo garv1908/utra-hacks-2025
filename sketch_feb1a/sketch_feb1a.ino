@@ -42,25 +42,25 @@ void loop() {
     // }
     if (isBlack(rgb)) {
       Serial.println("FINISHED!");
-      stop();
-      delay(20000);
+      // stop();
+      delay(10000);
       // exit(0);
     }
     else if (isRed(rgb)) {
       Serial.println("saw red, taking a uturn");
-      // uTurn();
+      uTurn();
     }
     else if (isGreen(rgb)) {
       Serial.println("saw green, taking a right turn");
-      // turnRight();
+      turnRight();
     }
     else if (isBlue(rgb)) {
       Serial.println("saw blue, taking a left turn");
-      // turnLeft();
+      turnLeft();
     }
 
     Serial.println("in while loop");
-    // goForward();
+    goForward();
     colourTest();
   }
   delay(500);
