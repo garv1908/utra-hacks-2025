@@ -1,10 +1,12 @@
-#define OE_PIN 5
-#define S0 6
-#define S1 7
-#define S2 8
-#define S3 9
-#define sensorOut 10
+#define OE_PIN 2
+#define S0 3
+#define S1 4
+#define S2 5
+#define S3 6
+#define sensorOut 7
 #define blackThreshold 250
+
+int rgb[3] = { 0, 0, 0 };
 
 void colourSetup() {
 	// colour stuff
@@ -26,41 +28,47 @@ void colourSetup() {
 
 
 void pickUpRGB() {
+
   // GET PULSE WIDTH
-	r = getRedPW();
+	rgb[0] = getRedPW();
 	// Delay to stabilize sensor
 	delay(200);
 
-	g = getGreenPW();
+	rgb[1] = getGreenPW();
 	delay(200);
 
-	b = getBluePW();
+	rgb[2] = getBluePW();
 	delay(200);
 }
 
-bool isBlack(int r, int g, int b) {
-  return (r > blackThreshold && g > blackThreshold && b > blackThreshold);
+bool isBlack(int rgb[]) {
+  bool a = (rgb[0] > blackThreshold && rgb[1] > blackThreshold && rgb[2] > blackThreshold);
+  delay(500);
+  pickUpRGB();
+  bool b = (rgb[0] > blackThreshold && rgb[1] > blackThreshold && rgb[2] > blackThreshold);
+  delay(500);
+  pickUpRGB();
+  bool c = (rgb[0] > blackThreshold && rgb[1] > blackThreshold && rgb[2] > blackThreshold);
+  return (a && b && c);
 }
-bool isRed(int r, int g, int b) {
-  return (r < g && r < b);
+bool isRed(int rgb[]) {
+  return (rgb[0] < rgb[1] && rgb[0] < rgb[2]);
 }
-bool isGreen(int r, int g, int b) {
-  return (g < r && g < b);
+bool isGreen(int rgb[]) {
+  return (rgb[1] < rgb[0] && rgb[1] < rgb[2]);
 }
-bool isBlue(int r, int g, int b) {
-  return (b < g && b < r);
+bool isBlue(int rgb[]) {
+  return (rgb[2] < rgb[1] && rgb[2] < rgb[0]);
 }
-
-
 
 void colourTest() {
 	// Print output to Serial Monitor
 	Serial.print("Red PW = ");
-	Serial.print(r);
+	Serial.print(rgb[0]);
 	Serial.print(" - Green PW = ");
-	Serial.print(g);
+	Serial.print(rgb[1]);
 	Serial.print(" - Blue PW = ");
-	Serial.println(b);
+	Serial.println(rgb[2]);
 }
 
 int getRedPW() {
